@@ -28,18 +28,22 @@ export class News extends Component {
             page: 1,
             totalResults: 0,
         }
-        document.title = `${this.capitalizeFirstLetter(this.props.category)} - NewsMonkey`
+        document.title = `${this.capitalizeFirstLetter(this.props.category)} - NewsBox`
     }
 
 
     async updateNews() {
+        this.props.setProgress(10);
         const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         let data = await fetch(url);
+        this.props.setProgress(30);
         let parsedData = await data.json()
+        this.props.setProgress(70);
         this.setState({
             articles: parsedData.articles,
             totalResults: parsedData.totalResults,
         })
+        this.props.setProgress(100);
     }
     async componentDidMount() {
         this.updateNews();
@@ -70,7 +74,7 @@ export class News extends Component {
     render() {
         return (
             <>
-                <h1 className='header-container text-center'>NewsMonkey - Top Headlines from {this.capitalizeFirstLetter(this.props.category)}</h1>
+                <h1 className='header-container text-center'>NewsBox - Top Headlines from {this.capitalizeFirstLetter(this.props.category)}</h1>
                 {/* {this.state.loading && <Spinner />} */}
                  <InfiniteScroll
                     dataLength={this.state.articles.length}
